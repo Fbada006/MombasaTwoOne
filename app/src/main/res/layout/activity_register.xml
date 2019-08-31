@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_height="match_parent"
+    tools:context=".login.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/msa" />
+
+    <EditText
+        android:id="@+id/register_email"
+        android:layout_marginTop="48dp"
+        android:layout_width="match_parent"
+        android:hint="Enter Email"
+        android:gravity="center"
+        android:inputType="textEmailAddress"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:id="@+id/register_password"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:id="@+id/register_confirm_password"
+        android:gravity="center"
+        android:inputType="textPassword"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:hint="Confirm Password"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
+    <Button
+        android:id="@+id/register_user"
+        android:layout_width="match_parent"
+        android:layout_marginTop="24dp"
+        android:text="Register"
+        android:textAllCaps="true"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
