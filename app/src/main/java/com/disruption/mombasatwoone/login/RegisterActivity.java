@@ -69,11 +69,14 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
                             User user = new User();
                             user.setAge(12);
                             user.setCity("Mombasa");
                             user.setName("User Name");
+
+                            sendVerificationEmail();
 
                             FirebaseDatabase.getInstance().getReference()
                                     .child("users")
@@ -98,8 +101,27 @@ public class RegisterActivity extends AppCompatActivity {
                                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                 }
                             });
+                        } else {
+                            //Notify te user that registration is not possible
                         }
                     }
                 });
+    }
+
+    private void sendVerificationEmail() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            firebaseUser.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Check your inbox", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Could not register", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 }

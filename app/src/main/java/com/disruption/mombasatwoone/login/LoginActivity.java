@@ -17,7 +17,6 @@ import com.disruption.mombasatwoone.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,33 +65,41 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailEt.getText().toString().trim();
                 String password = passwordEt.getText().toString().trim();
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if ((!email.isEmpty()) && (!password.isEmpty())) {
-                    //Continue with the login
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(LoginActivity.this,
-                                                "Sign In Successful", Toast.LENGTH_SHORT).show();
-                                        Intent intent =
-                                                new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(LoginActivity.this,
-                                                "Sign In Failed", Toast.LENGTH_SHORT).show();
+
+                    if (firebaseUser != null && firebaseUser.isEmailVerified()) {
+                        //Continue with the login
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(LoginActivity.this,
+                                                    "Sign In Successful", Toast.LENGTH_SHORT).show();
+                                            Intent intent =
+                                                    new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(LoginActivity.this,
+                                                    "Sign In Failed", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "onFailure: -----------" + e.getMessage() );
-                            Toast.makeText(LoginActivity.this,
-                                    "Sign In Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "onFailure: -----------" + e.getMessage());
+                                Toast.makeText(LoginActivity.this,
+                                        "Sign In Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(LoginActivity.this,
+                                "Your email is not verified. Please verify",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this,
                             "Email and password cannot be empty",
